@@ -1,25 +1,12 @@
 <?php
 
-$result = NULL;
+$login_ok = NULL;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if ((isset($_POST['var1']) && isset($_POST['var2'])) && ($_POST['var1'] !== "" || $_POST['var1'] !== "")) {
-        $operation = $_POST['operation'];
-        switch ($operation) {
-            case '+':
-                $result = $_POST['var1'] + $_POST['var2'];
-                break;
-            case '-':
-                $result = $_POST['var1'] - $_POST['var2'];
-                break;
-            case '*':
-                $result = $_POST['var1'] * $_POST['var2'];
-                break;
-            case '/':
-                $result = $_POST['var1'] / $_POST['var2'];
-                break;
-        }
-    }
+    $login_ok = (
+        (isset($_POST['user']) && isset($_POST['password'])) &&
+        ($_POST['user'] == 'admin' || $_POST['password'] == 'admin1234')
+    );
 }
 ?>
 
@@ -60,33 +47,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Calculator</a>
+            <a class="navbar-brand" href="#">Simple Login</a>
         </div>
     </nav>
 
     <div class="container w-25 border p-4 mt-4">
         <form method="POST" action="">
             <div class="mb-3">
-                <label class="form-label" for="var1">Variable 1</label>
-                <input type="number" name="var1" class="form-control" />
+                <label class="form-label">User</label>
+                <input type="text" name="user" class="form-control">
+                <div class="form-text">Just login with user "admin" and password "admin1234".</div>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="var2">Variable 2</label>
-                <input type="number" name="var2" class="form-control" />
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control">
             </div>
-            <button type="submit" value="+" name="operation" class="btn btn-primary">+</button>
-            <button type="submit" value="-" name="operation" class="btn btn-primary">-</button>
-            <button type="submit" value="*" name="operation" class="btn btn-primary">x</button>
-            <button type="submit" value="/" name="operation" class="btn btn-primary">/</button>
+            <button type="submit" class="btn btn-primary">Login</button>
         </form>
     </div>
 
-    <div class="container w-25 border p-4 mt-4">
+    <div class='container w-25 border p-4 mt-4'>
         <?php
-        if ($result !== NULL) {
-            echo "El resultado es $result";
-        } else {
-            echo "Falta realizar cuenta!";
+        if ($login_ok !== NULL) {
+            if ($login_ok) {
+                $user = $_POST['user'];
+                echo "Welcome $user!";
+            } else {
+                echo 'Wrong credentials!';
+            }
         }
         ?>
     </div>
